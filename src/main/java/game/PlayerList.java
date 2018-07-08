@@ -8,25 +8,20 @@ import model.GameProperties;
 import model.player.AIPlayer;
 import model.player.Player;
 
-public class PlayerListHandler {
+public class PlayerList {
 
     private List<Player> players;
 
-    public List<Player> createInRandomOrder(GameProperties gameProperties) {
+    public PlayerList(GameProperties gameProperties){
         players = new ArrayList<>();
         players.add(new AIPlayer(0, gameProperties.getPlayerCharacters().get(0)));
         for (int i = 1; i < gameProperties.getPlayerCharacters().size(); i++) {
             players.add(new Player(i, gameProperties.getPlayerCharacters().get(i)));
         }
-
         Collections.shuffle(players);
-        return players;
     }
 
-    public Player getNextPlayer(Player currentPlayer) {
-        int index = players.indexOf(currentPlayer);
-        boolean isCurrentIndexLast = index == players.size() - 1;
-        int nextIndex = isCurrentIndexLast ? 0 : index + 1;
-        return players.get(nextIndex);
+    public List<Player> getPlayers() {
+        return players;
     }
 }

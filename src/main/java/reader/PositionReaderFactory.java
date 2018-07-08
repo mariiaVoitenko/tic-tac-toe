@@ -1,5 +1,6 @@
 package reader;
 
+import model.Board;
 import model.player.AIPlayer;
 import model.player.Player;
 import reader.impl.AIPositionReader;

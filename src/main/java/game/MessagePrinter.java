@@ -8,11 +8,17 @@ import model.player.Player;
 
 public class MessagePrinter {
 
+    public static void printWrongPositionMessage(){
+        System.out.println("You should enter 2 digits separates by comma");
+    }
+
     public static void printTurnMessage(Player player) {
         if (player instanceof AIPlayer) {
             System.out.println("Now it is computer turn");
         } else {
-            System.out.println(MessageFormat.format("Time to make a turn for {0} player", player.getId() + 1));
+            System.out.println(MessageFormat.format("Time to make a turn for {0} player with character {1}. " +
+                            "Please, enter 2 integers separated by comma"
+                    , player.getId() + 1, player.getCharacter()));
         }
     }
 

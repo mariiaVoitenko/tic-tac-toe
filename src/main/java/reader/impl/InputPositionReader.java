@@ -2,8 +2,10 @@ package reader.impl;
 
 import java.util.Scanner;
 
+import game.MessagePrinter;
 import model.Position;
 import reader.PositionReader;
+import validator.InputPositionValidator;
 import validator.PositionValidator;
 
 public class InputPositionReader implements PositionReader {
@@ -18,14 +20,22 @@ public class InputPositionReader implements PositionReader {
 
     @Override
     public Position readPosition() {
-        String position = scanner.nextLine();
-        String[] input = position.split(" ");
-        if (input.length < 2 || PositionValidator.isNotValid(input, size)) {
-            System.out.println("You should enter 2 digits separates by whitespace");
-            readPosition();
+        do {
+            String positionInput = scanner.nextLine();
+            String[] input = positionInput.split(",");
+            if (!InputPositionValidator.validate(input)) {
+                MessagePrinter.printWrongPositionMessage();
+                continue;
+            }
+            int x = Integer.valueOf(input[0]);
+            int y = Integer.valueOf(input[1]);
+            Position position = new Position(x, y);
+            if (PositionValidator.isNotValid(position, size)) {
+                MessagePrinter.printWrongPositionMessage();
+                continue;
+            }
+            return position;
         }
-        int x = Integer.valueOf(input[0]);
-        int y = Integer.valueOf(input[1]);
-        return new Position(x, y);
+        while (true);
     }
 }

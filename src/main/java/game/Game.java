@@ -1,7 +1,5 @@
 package game;
 
-import java.util.List;
-
 import configuration.ConfigurationsLoader;
 import exception.property.ConfigurationException;
 import exception.value.SizeException;
@@ -15,56 +13,52 @@ import reader.PositionReaderFactory;
 
 public class Game {
 
-    private Board board;
-    private List<Player> players;
-    private GameProperties gameProperties;
-    private PlayerListHandler playerListHandler;
-    private PositionReaderFactory positionReaderFactory;
     private int maxTurnsCount;
-    private Player currentPlayer;
+    private GameProperties gameProperties;
+    private PositionReaderFactory positionReaderFactory;
 
     public Game() throws ConfigurationException, ValueValidationException {
         ConfigurationsLoader configurationsLoader = new ConfigurationsLoader();
         gameProperties = configurationsLoader.readGameProperties();
-        playerListHandler = new PlayerListHandler();
-        int size = gameProperties.getSize();
-        maxTurnsCount = size * size;
-        positionReaderFactory = new PositionReaderFactory(size);
+        maxTurnsCount =  gameProperties.getSize() *  gameProperties.getSize();
+        positionReaderFactory = new PositionReaderFactory(gameProperties.getSize());
     }
 
     public void play() throws SizeException {
-        board = new Board(gameProperties.getSize());
-        players = playerListHandler.createInRandomOrder(gameProperties);
+        Player currentPlayer;
+        Board board = new Board(gameProperties.getSize());
+        PlayerList playerList = new PlayerList(gameProperties);
         WinStrategiesContainer winStrategiesContainer = new WinStrategiesContainer(board);
         int turnsCount = 0;
         boolean isGameWon;
         do {
-            currentPlayer = getCurrentPlayer(turnsCount);
-            MessagePrinter.printTurnMessage(currentPlayer);
-            turnsCount = makeTurn() ? ++turnsCount : turnsCount;
+            currentPlayer = getCurrentPlayer(turnsCount, playerList);
+            turnsCount = makeTurn(currentPlayer, board) ? ++turnsCount : turnsCount;
             isGameWon = winStrategiesContainer.isGameWon(currentPlayer);
         } while (turnsCount < maxTurnsCount && !isGameWon);
-        printResultMessage(isGameWon);
+        printResultMessage(isGameWon, currentPlayer);
     }
 
-    private Player getCurrentPlayer(int turnsCount) {
-        return turnsCount == 0 ? players.get(0) : playerListHandler.getNextPlayer(currentPlayer);
+    private Player getCurrentPlayer(int turnsCount, PlayerList playerList) {
+        int currentIndex = turnsCount % playerList.getPlayers().size();
+        return playerList.getPlayers().get(currentIndex);
     }
 
-    private boolean makeTurn() {
+    private boolean makeTurn(Player currentPlayer, Board board) {
+        MessagePrinter.printTurnMessage(currentPlayer);
         Position position = positionReaderFactory.getPositionReader(currentPlayer).readPosition();
+        boolean successfulTurn = false;
         if (!board.isPositionFree(position)) {
             MessagePrinter.printInvalidPositionMessage(position);
-            makeTurn();
         } else {
             board.markPosition(position, currentPlayer);
             board.drawBoard();
+            successfulTurn = true;
         }
-        return true;
+        return successfulTurn;
     }
 
-
-    private void printResultMessage(boolean isGameWon) {
+    private void printResultMessage(boolean isGameWon, Player currentPlayer) {
         if (isGameWon) {
             MessagePrinter.printWinGameMessage(currentPlayer);
         } else {

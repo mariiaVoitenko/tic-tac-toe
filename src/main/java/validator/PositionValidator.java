@@ -1,21 +1,15 @@
 package validator;
 
-import exception.value.PositionIsOutOfRangeException;
+import model.Position;
 
 public class PositionValidator {
 
-    public static boolean isNotValid(String[] input, int maxValue) {
-        try {
-            int x = Integer.valueOf(input[0]);
-            int y = Integer.valueOf(input[1]);
-            return isNotInRange(x, maxValue) || isNotInRange(y, maxValue);
-        } catch (NumberFormatException e) {
-            throw new PositionIsOutOfRangeException(maxValue);
-        }
+    public static boolean isNotValid(Position position, int maxValue) {
+        return isNotInRange(position.getX(), maxValue) || isNotInRange(position.getY(), maxValue);
     }
 
     private static boolean isNotInRange(int x, int maxValue) {
-        return x >= maxValue && x < 0;
+        return x >= maxValue || x < 0;
     }
 
 }
