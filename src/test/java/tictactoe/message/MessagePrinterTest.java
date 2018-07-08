@@ -29,7 +29,7 @@ public class MessagePrinterTest {
     private Position position;
 
     @Before
-    public void setUpStreams() {
+    public void setUp() {
         player = new Player(ID, CHARACTER);
         aiPlayer = new AIPlayer(ID, CHARACTER);
         position = new Position(X, Y);

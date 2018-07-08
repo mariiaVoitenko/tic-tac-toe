@@ -11,7 +11,7 @@ import tictactoe.model.Board;
 import tictactoe.model.Position;
 import tictactoe.model.player.Player;
 
-public class HorizontalWinStrategyIntegrationTest {
+public class HorizontalWinStrategyTest {
 
     private static final int ID = 1;
     private static final int ID2 = 2;

@@ -10,7 +10,7 @@ import tictactoe.model.Board;
 import tictactoe.model.Position;
 import tictactoe.model.player.Player;
 
-public class WinStrategiesContainerIntegrationTest {
+public class WinStrategiesContainerTest {
 
     private static final int ID = 1;
     private static final String X = "X";
