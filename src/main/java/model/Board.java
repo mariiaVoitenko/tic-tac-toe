@@ -9,8 +9,8 @@ public class Board {
     private int size;
     private String[][] board;
 
-    public Board(GameProperties properties) throws SizeException { // todo leave only size in constructor
-        size = properties.getSize();
+    public Board(int size) throws SizeException {
+        this.size = size;
         SizeValidator.validate(size);
         board = new String[size][size];
         fillWithEmptyCharacters();
@@ -37,12 +37,7 @@ public class Board {
         board[position.getX()][position.getY()] = player.getCharacter();
     }
 
-   // todo доска точно хочет быть ответсвенной за проверку? Может она просто хранит пользователей и возвращает при запросе?
-    public boolean isPositionMarkedWithCurrentPlayer(Position position, Player player) {
-        return getValue(position).equals(player.getCharacter());
-    }
-
-    private String getValue(Position position) {
+    public String getValue(Position position) {
         return board[position.getX()][position.getY()];
     }
 

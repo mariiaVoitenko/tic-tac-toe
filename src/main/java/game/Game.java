@@ -1,13 +1,11 @@
 package game;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import configuration.ConfigurationsLoader;
-import exception.property.ConfigurationFileNotFoundException;
-import exception.property.PropertyNotFoundException;
-import exception.value.CharacterIsEmptyException;
+import exception.property.ConfigurationException;
 import exception.value.SizeException;
+import exception.value.ValueValidationException;
 import game.win.WinStrategiesContainer;
 import model.Board;
 import model.GameProperties;
@@ -19,44 +17,59 @@ public class Game {
 
     private Board board;
     private List<Player> players;
+    private GameProperties gameProperties;
+    private PlayerListHandler playerListHandler;
     private PositionReaderFactory positionReaderFactory;
-    private WinStrategiesContainer winStrategiesContainer;
-
     private int maxTurnsCount;
     private Player currentPlayer;
 
-    public Game() throws ConfigurationFileNotFoundException, CharacterIsEmptyException, SizeException, PropertyNotFoundException {
+    public Game() throws ConfigurationException, ValueValidationException {
         ConfigurationsLoader configurationsLoader = new ConfigurationsLoader();
-        GameProperties gameProperties = configurationsLoader.readGameProperties();
-        maxTurnsCount = gameProperties.getSize() * gameProperties.getSize();
-        board = new Board(gameProperties); // try move board inside play()
-        positionReaderFactory = new PositionReaderFactory(gameProperties.getSize());
-        players = PlayerListCreator.createInRandomOrder(gameProperties);
-        winStrategiesContainer = new WinStrategiesContainer(board);
+        gameProperties = configurationsLoader.readGameProperties();
+        playerListHandler = new PlayerListHandler();
+        int size = gameProperties.getSize();
+        maxTurnsCount = size * size;
+        positionReaderFactory = new PositionReaderFactory(size);
     }
 
-    public void play() {
+    public void play() throws SizeException {
+        board = new Board(gameProperties.getSize());
+        players = playerListHandler.createInRandomOrder(gameProperties);
+        WinStrategiesContainer winStrategiesContainer = new WinStrategiesContainer(board);
         int turnsCount = 0;
-        currentPlayer = players.get(0);
+        boolean isGameWon;
         do {
-            Position position = positionReaderFactory.getPositionReader(currentPlayer).readPosition();
-            System.out.println(MessageFormat.format("Time to make a turn for {0} player", currentPlayer.getId() + 1));
-            if (board.isPositionFree(position)) {
-                board.markPosition(position, currentPlayer);
-                board.drawBoard();
-                setNextPlayer();
-                turnsCount++;
-            }
-            System.out.println(MessageFormat.format("Position {0} {1} is already marked", position.getX(), position.getY()));
-        } while (turnsCount < maxTurnsCount && winStrategiesContainer.isGameWon(currentPlayer));
+            currentPlayer = getCurrentPlayer(turnsCount);
+            MessagePrinter.printTurnMessage(currentPlayer);
+            turnsCount = makeTurn() ? ++turnsCount : turnsCount;
+            isGameWon = winStrategiesContainer.isGameWon(currentPlayer);
+        } while (turnsCount < maxTurnsCount && !isGameWon);
+        printResultMessage(isGameWon);
     }
 
-    private void setNextPlayer() {
-        int index = players.indexOf(currentPlayer);
-        boolean isCurrentIndexLast = index == players.size() - 1;
-        int nextIndex = isCurrentIndexLast ? 0 : index + 1;
-        currentPlayer = players.get(nextIndex);
+    private Player getCurrentPlayer(int turnsCount) {
+        return turnsCount == 0 ? players.get(0) : playerListHandler.getNextPlayer(currentPlayer);
     }
 
+    private boolean makeTurn() {
+        Position position = positionReaderFactory.getPositionReader(currentPlayer).readPosition();
+        if (!board.isPositionFree(position)) {
+            MessagePrinter.printInvalidPositionMessage(position);
+            makeTurn();
+        } else {
+            board.markPosition(position, currentPlayer);
+            board.drawBoard();
+        }
+        return true;
+    }
+
+
+    private void printResultMessage(boolean isGameWon) {
+        if (isGameWon) {
+            MessagePrinter.printWinGameMessage(currentPlayer);
+        } else {
+            MessagePrinter.printDrawGameMessage();
+        }
+    }
 
 }
