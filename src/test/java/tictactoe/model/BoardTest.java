@@ -18,16 +18,16 @@ import tictactoe.model.player.Player;
 
 public class BoardTest {
 
-    private static final int SIZE = 3;
-    private static final String BLANK_STRING = " ";
     private static final int ID = 1;
+    private static final int SIZE = 3;
     private static final String CHARACTER = "X";
+    private static final String BLANK_STRING = " ";
 
     private Board board;
     private Player player;
     private Random random = new Random();
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
+    private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private PrintStream originalOut = System.out;
 
     @Before
     public void setUp() throws SizeException {

@@ -8,19 +8,20 @@ import org.junit.Test;
 import tictactoe.exception.value.SizeException;
 import tictactoe.game.win.strategy.BoardTraversalOrder;
 import tictactoe.model.Board;
-import tictactoe.model.Position;
 import tictactoe.model.player.Player;
+import util.LineUtils;
 
 public class VerticalWinStrategyTest {
 
     private static final int ID = 1;
     private static final int ID2 = 2;
+    private static final int SIZE = 3;
     private static final String X = "X";
     private static final String O = "O";
-    private static final int SIZE = 3;
+
+    private Board board;
     private Player player;
     private Player player2;
-    private Board board;
 
     private VerticalWinStrategy verticalWinStrategy;
 
@@ -40,22 +41,16 @@ public class VerticalWinStrategyTest {
 
     @Test
     public void shouldReturnTrueWhenUserHasVerticalLineMarked() {
-        markVerticalLine();
+        LineUtils.markVerticalLine(board, player);
         boolean isWinner = verticalWinStrategy.isWinner(board, player);
         assertThat(isWinner).isTrue();
     }
 
     @Test
     public void shouldReturnFalseWhenOtherUserHasVerticalLineMarked() {
-        markVerticalLine();
+        LineUtils.markVerticalLine(board, player);
         boolean isWinner = verticalWinStrategy.isWinner(board, player2);
         assertThat(isWinner).isFalse();
-    }
-
-    private void markVerticalLine() {
-        board.markPosition(new Position(0, 0), player);
-        board.markPosition(new Position(1, 0), player);
-        board.markPosition(new Position(2, 0), player);
     }
 
 }

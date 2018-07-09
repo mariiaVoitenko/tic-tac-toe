@@ -19,8 +19,9 @@ public class PlayerListTest {
     private static final String PLAYER_1_CHARACTER = "X";
     private static final String PLAYER_2_CHARACTER = "Y";
     private static final String PLAYER_3_CHARACTER = "Z";
+
     private Predicate<Player> playerPredicate = player -> !(player instanceof AIPlayer);
-    private Predicate<Player> aIPlayerPredicate = player -> player instanceof AIPlayer;
+    private Predicate<Player> aiPlayerPredicate = player -> player instanceof AIPlayer;
 
     private PlayerList playerList;
     private List<Player> players;
@@ -39,26 +40,26 @@ public class PlayerListTest {
 
     @Test
     public void shouldReturnOnlyOneAiPlayer() {
-        long aiPlayersCount = getSize(aIPlayerPredicate);
+        long aiPlayersCount = getSize(aiPlayerPredicate);
         assertThat(aiPlayersCount).isEqualTo(1);
     }
 
     @Test
     public void shouldReturnTwoCommonPlayers() {
-        long commonPlayersCount = getSize(playerPredicate);
-        assertThat(commonPlayersCount).isEqualTo(2);
+        long playersCount = getSize(playerPredicate);
+        assertThat(playersCount).isEqualTo(2);
     }
 
     @Test
     public void shouldReturnIDEqualToZeroForAIPlayer() {
-        Player player = getList(aIPlayerPredicate).get(0);
-        assertThat(player.getId()).isEqualTo(0);
+        Player aiPlayer = getList(aiPlayerPredicate).get(0);
+        assertThat(aiPlayer.getId()).isEqualTo(0);
     }
 
     @Test
     public void shouldReturnCharacterEqualToXForAIPlayer() {
-        Player player = getList(aIPlayerPredicate).get(0);
-        assertThat(player.getCharacter()).isEqualTo(PLAYER_1_CHARACTER);
+        Player aiPlayer = getList(aiPlayerPredicate).get(0);
+        assertThat(aiPlayer.getCharacter()).isEqualTo(PLAYER_1_CHARACTER);
     }
 
     @Test

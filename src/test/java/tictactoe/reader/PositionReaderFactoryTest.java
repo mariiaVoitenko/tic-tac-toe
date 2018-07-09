@@ -12,14 +12,15 @@ import tictactoe.reader.impl.InputPositionReader;
 
 public class PositionReaderFactoryTest {
 
-    private static final int SIZE = 3;
     private static final int ID = 1;
     private static final int ID2 = 2;
+    private static final int SIZE = 3;
     private static final String CHARACTER = "X";
     private static final String CHARACTER2 = "O";
-    private PositionReaderFactory positionReaderFactory;
+
     private Player player;
     private Player aiPlayer;
+    private PositionReaderFactory positionReaderFactory;
 
     @Before
     public void setUp(){

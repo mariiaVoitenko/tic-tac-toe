@@ -16,15 +16,15 @@ import tictactoe.model.GameProperties;
 
 public class ConfigurationsLoaderIntegrationTest {
 
-    private static final String CONFIG_PROPERTIES = "config.properties";
-    private static final String WRONG_PROPERTIES = "wrong.properties";
-    private static final String INVALID_CHARACTER_PROPERTIES = "invalid.character.properties";
-    private static final String INVALID_PROPERTIES = "invalid.properties";
     private static final int EXPECTED_SIZE = 3;
+    private static final String SIZE = "size";
     private static final String EXPECTED_PLAYER1_CHARACTER = "X";
     private static final String EXPECTED_PLAYER2_CHARACTER = "Y";
     private static final String EXPECTED_PLAYER3_CHARACTER = "Z";
-    private static final String SIZE = "size";
+    private static final String WRONG_PROPERTIES = "wrong.properties";
+    private static final String CONFIG_PROPERTIES = "config.properties";
+    private static final String INVALID_PROPERTIES = "invalid.properties";
+    private static final String INVALID_CHARACTER_PROPERTIES = "invalid.character.properties";
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -34,8 +34,8 @@ public class ConfigurationsLoaderIntegrationTest {
     @Test
     public void shouldThrowExceptionWhenFileDoesNotExist() throws ConfigurationFileNotFoundException {
         exception.expect(ConfigurationFileNotFoundException.class);
-        String message = MessageFormat.format("File with name {0} is not found", WRONG_PROPERTIES);
-        exception.expectMessage(containsString(message));
+        String wrongFileMessage = MessageFormat.format("File with name {0} is not found", WRONG_PROPERTIES);
+        exception.expectMessage(containsString(wrongFileMessage));
         new ConfigurationsLoader(WRONG_PROPERTIES);
     }
 
@@ -70,8 +70,8 @@ public class ConfigurationsLoaderIntegrationTest {
     @Test
     public void shouldThrowPropertyNotFoundExceptionWhenConfigurationFileContainsNoSizeProperty() throws ConfigurationFileNotFoundException, CharacterIsEmptyException, PropertyNotFoundException {
         exception.expect(PropertyNotFoundException.class);
-        String sizeMessage = MessageFormat.format("Property with name {0} is not found", SIZE);
-        exception.expectMessage(containsString(sizeMessage));
+        String propertyNotFoundMessage = MessageFormat.format("Property with name {0} is not found", SIZE);
+        exception.expectMessage(containsString(propertyNotFoundMessage));
         new ConfigurationsLoader(INVALID_PROPERTIES).readGameProperties();
     }
 

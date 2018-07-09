@@ -7,14 +7,15 @@ import org.junit.Test;
 
 import tictactoe.exception.value.SizeException;
 import tictactoe.model.Board;
-import tictactoe.model.Position;
 import tictactoe.model.player.Player;
+import util.LineUtils;
 
 public class WinStrategiesContainerTest {
 
     private static final int ID = 1;
-    private static final String X = "X";
     private static final int SIZE = 3;
+    private static final String X = "X";
+
     private Player player;
     private Board board;
 
@@ -35,54 +36,30 @@ public class WinStrategiesContainerTest {
 
     @Test
     public void shouldReturnTrueWhenOneHorizontalLineMarkedByUserCharacter(){
-        markHorizontalLine();
+        LineUtils.markHorizontalLine(board, player);
         boolean result = winStrategiesContainer.isGameWon(player);
         assertThat(result).isTrue();
     }
 
     @Test
     public void shouldReturnTrueWhenOneVerticalLineMarkedByUserCharacter(){
-        markVerticalLine();
+        LineUtils.markVerticalLine(board, player);
         boolean result = winStrategiesContainer.isGameWon(player);
         assertThat(result).isTrue();
     }
 
     @Test
     public void shouldReturnTrueWhenRightDiagonalLineMarkedByUserCharacter(){
-        markRightDiagonalLine();
+        LineUtils.markRightDiagonalLine(board, player);
         boolean result = winStrategiesContainer.isGameWon(player);
         assertThat(result).isTrue();
     }
 
     @Test
     public void shouldReturnTrueWhenLeftDiagonalLineMarkedByUserCharacter(){
-        markLeftDiagonalLine();
+        LineUtils.markLeftDiagonalLine(board, player);
         boolean result = winStrategiesContainer.isGameWon(player);
         assertThat(result).isTrue();
-    }
-
-    private void markHorizontalLine() {
-        board.markPosition(new Position(0,0),player);
-        board.markPosition(new Position(0,1),player);
-        board.markPosition(new Position(0,2),player);
-    }
-
-    private void markVerticalLine() {
-        board.markPosition(new Position(0,0),player);
-        board.markPosition(new Position(1,0),player);
-        board.markPosition(new Position(2,0),player);
-    }
-
-    private void markRightDiagonalLine() {
-        board.markPosition(new Position(0,0),player);
-        board.markPosition(new Position(1,1),player);
-        board.markPosition(new Position(2,2),player);
-    }
-
-    private void markLeftDiagonalLine() {
-        board.markPosition(new Position(0,2),player);
-        board.markPosition(new Position(1,1),player);
-        board.markPosition(new Position(2,0),player);
     }
 
 }
