@@ -1,6 +1,5 @@
 package tictactoe.reader;
 
-import tictactoe.model.Board;
 import tictactoe.model.player.AIPlayer;
 import tictactoe.model.player.Player;
 import tictactoe.reader.impl.AIPositionReader;
