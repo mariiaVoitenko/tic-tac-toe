@@ -1,0 +1,8 @@
+1) Go to the root folder of tic-tac-toe
+2) Open cmd and perform these commands
+    ./gradlew jar
+    ./gradlew build
+    ./gradlew test
+3) Perform following commands to start the game
+    cd build\libs
+    java -jar tic-tac-toe-SNAPSHOT-0.1.jar
