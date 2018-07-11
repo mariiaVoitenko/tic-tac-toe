@@ -19,3 +19,5 @@
 9) PositionReaderFactory.java returns proper PositionReader for current player.
 10)To validate input from console and configurations several validators are provided. All of them throw customized
    exceptions.
+   
+   Information about deployment can be found in HOWTODEPLOY.txt
